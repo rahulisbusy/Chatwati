@@ -1,8 +1,8 @@
 import discord
 import os
 import requests
-
-
+from dotenv import load_dotenv
+load_dotenv()
 # Load tokens from secrets
 discord_token = os.getenv('SECRET_KEY')
 gemini_api_key = os.getenv('GEMINI_API_KEY')
