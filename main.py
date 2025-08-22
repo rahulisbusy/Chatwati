@@ -1,7 +1,10 @@
 import discord
-import os
+
 import requests
 from dotenv import load_dotenv
+import os
+import threading
+from flask import Flask
 load_dotenv()
 # Load tokens from secrets
 discord_token = os.getenv('SECRET_KEY')
@@ -90,5 +93,22 @@ class MyClient(discord.Client):
 
 
 client = MyClient(intents=intents)
+
+
+
+# --- Tiny web server just for deployment health checks ---
+app = Flask(__name__)
+
+@app.route("/")
+def home():
+    return "💘 Chatwati bot is alive!"
+
+def run_web():
+    port = int(os.environ.get("PORT", 5000))  # Heroku/Railway sets this
+    app.run(host="0.0.0.0", port=port)
+
+# Start web server in a background thread
+threading.Thread(target=run_web).start()
+
 
 client.run(discord_token)
